@@ -1,34 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <script src="/script.js"></script>
-    <link rel="stylesheet" href="/styles.css" />
-    <title>JS-Timer</title>
+    <!-- <title> Stopwatch Timer application | CodingLab </title>-->
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="center">
-      <small> Enter <b>TIMER</b> Value And Press ENTER</small>
+    <div class="wrapper">
+      <div class="time">
+        <span class="hour">00</span>
+        <span class="colon">:</span>
+        <span class="minute">00</span>
+        <span class="colon">:</span>
+        <span class="second">00</span>
+        <span class="colon ms-colon">:</span>
+        <span class="millisecond">00</span>
+      </div>
+      <div class="buttons">
+        <button class="start">Start</button>
+        <button class="stop">Stop</button>
+        <button class="reset">Reset</button>
+      </div>
     </div>
-    <div class="container">
-      <p>Classic - Timer</p>
 
-      <input id="tInput" class="tInput center" placeholder="Timer Value" />
+    <script>
+      let hr = (min = sec = ms = "0" + 0),
+        startTimer;
 
-      <div id="timer" class="timer-display">Enter ↑ Value</div>
-      <small><sup>seconds</sup></small>
-      <br />
+      const startBtn = document.querySelector(".start"),
+        stopBtn = document.querySelector(".stop"),
+        resetBtn = document.querySelector(".reset");
 
-      <button id="start">Start</button>
-      <button id="stop">Stop</button>
-      <button id="reset">Reset</button>
-    </div>
-    <small
-      >Copyrights &copy; | Arslan Ameer -
-      <em>TeamDev-SI&trade;</em>
-    </small>
-    <div id="aud"></div>
+      startBtn.addEventListener("click", start);
+      stopBtn.addEventListener("click", stop);
+      resetBtn.addEventListener("click", reset);
+
+      function start() {
+        startBtn.classList.add("active");
+        stopBtn.classList.remove("stopActive");
+
+        startTimer = setInterval(() => {
+          ms++;
+          ms = ms < 10 ? "0" + ms : ms;
+
+          if (ms == 100) {
+            sec++;
+            sec = sec < 10 ? "0" + sec : sec;
+            ms = "0" + 0;
+          }
+          if (sec == 60) {
+            min++;
+            min = min < 10 ? "0" + min : min;
+            sec = "0" + 0;
+          }
+          if (min == 60) {
+            hr++;
+            hr = hr < 10 ? "0" + hr : hr;
+            min = "0" + 0;
+          }
+          putValue();
+        }, 10); //1000ms = 1s
+      }
+
+      function stop() {
+        startBtn.classList.remove("active");
+        stopBtn.classList.add("stopActive");
+        clearInterval(startTimer);
+      }
+      function reset() {
+        startBtn.classList.remove("active");
+        stopBtn.classList.remove("stopActive");
+        clearInterval(startTimer);
+        hr = min = sec = ms = "0" + 0;
+        putValue();
+      }
+
+      function putValue() {
+        document.querySelector(".millisecond").innerText = ms;
+        document.querySelector(".second").innerText = sec;
+        document.querySelector(".minute").innerText = min;
+        document.querySelector(".hour").innerText = hr;
+      }
+    </script>
   </body>
 </html>
